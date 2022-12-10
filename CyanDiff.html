@@ -14,6 +14,7 @@
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -38,9 +39,9 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">cyanDiff package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#cyandiff-ad-helpers-module">cyanDiff.ad_helpers module</a></li>
-<li><a class="reference internal" href="#cyandiff-ad-overloads-module">cyanDiff.ad_overloads module</a></li>
-<li><a class="reference internal" href="#cyandiff-ad-types-module">cyanDiff.ad_types module</a></li>
+<li><a class="reference internal" href="#module-cyanDiff.ad_helpers">cyanDiff.ad_helpers module</a></li>
+<li><a class="reference internal" href="#module-cyanDiff.ad_overloads">cyanDiff.ad_overloads module</a></li>
+<li><a class="reference internal" href="#module-cyanDiff.ad_types">cyanDiff.ad_types module</a></li>
 <li><a class="reference internal" href="#module-cyanDiff">Module contents</a></li>
 </ul>
 </li>
@@ -75,14 +76,389 @@
 <div class="section" id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
 </div>
-<div class="section" id="cyandiff-ad-helpers-module">
-<h2>cyanDiff.ad_helpers module<a class="headerlink" href="#cyandiff-ad-helpers-module" title="Permalink to this headline"></a></h2>
+<div class="section" id="module-cyanDiff.ad_helpers">
+<span id="cyandiff-ad-helpers-module"></span><h2>cyanDiff.ad_helpers module<a class="headerlink" href="#module-cyanDiff.ad_helpers" title="Permalink to this headline"></a></h2>
+<p>Additional useful functions to provide additional utility to users.</p>
+<p>The only function defined here now is <a class="reference internal" href="#cyanDiff.ad_helpers.make_vars" title="cyanDiff.ad_helpers.make_vars"><code class="xref py py-class docutils literal notranslate"><span class="pre">make_vars()</span></code></a> which gives the user access to variables
+which can then be used for defining functions that can be used for AD. More functions will be added, 
+e.g. a function to perform Newton’s algorithm using our AD calculator.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cyanDiff.ad_helpers.make_vars">
+<span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_helpers.</span></span><span class="sig-name descname"><span class="pre">make_vars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_vars</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_helpers.make_vars" title="Permalink to this definition"></a></dt>
+<dd><p>Provide a variables for user to define functions for AD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>num_vars</strong> (<em>int</em>) – number of variables to be provided.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of variables of <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code> type if <code class="xref py py-class docutils literal notranslate"><span class="pre">num_vars</span></code> is greater than 1,</p>
+</dd>
+</dl>
+<p>return single variable of <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code> type otherwise.
+:rtype: <code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></p>
+</dd></dl>
+
 </div>
-<div class="section" id="cyandiff-ad-overloads-module">
-<h2>cyanDiff.ad_overloads module<a class="headerlink" href="#cyandiff-ad-overloads-module" title="Permalink to this headline"></a></h2>
+<div class="section" id="module-cyanDiff.ad_overloads">
+<span id="cyandiff-ad-overloads-module"></span><h2>cyanDiff.ad_overloads module<a class="headerlink" href="#module-cyanDiff.ad_overloads" title="Permalink to this headline"></a></h2>
+<p>Overloaded math functions for defining functions for Automatic Differentiation (AD)</p>
+<p>The math functions in this module are to define math functions that the user can use to define the
+function that they would like to autodifferentiate. These math functions can be applied by users 
+onto the variables and functions (objects of type <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>, see <code class="xref py py-class docutils literal notranslate"><span class="pre">ad_types</span></code> module 
+documentation). The basic trig functions (<a class="reference internal" href="#cyanDiff.ad_overloads.sin" title="cyanDiff.ad_overloads.sin"><code class="xref py py-class docutils literal notranslate"><span class="pre">sin</span></code></a>, <a class="reference internal" href="#cyanDiff.ad_overloads.cos" title="cyanDiff.ad_overloads.cos"><code class="xref py py-class docutils literal notranslate"><span class="pre">cos</span></code></a>, <a class="reference internal" href="#cyanDiff.ad_overloads.tan" title="cyanDiff.ad_overloads.tan"><code class="xref py py-class docutils literal notranslate"><span class="pre">tan</span></code></a>), as well as
+<a class="reference internal" href="#cyanDiff.ad_overloads.exp" title="cyanDiff.ad_overloads.exp"><code class="xref py py-class docutils literal notranslate"><span class="pre">exp</span></code></a> and <a class="reference internal" href="#cyanDiff.ad_overloads.log" title="cyanDiff.ad_overloads.log"><code class="xref py py-class docutils literal notranslate"><span class="pre">log</span></code></a> are provided.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="cyanDiff.ad_overloads.sin">
+<span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_overloads.</span></span><span class="sig-name descname"><span class="pre">sin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_overloads.sin" title="Permalink to this definition"></a></dt>
+<dd><p>Math sine function for defining functions for AD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>) – input to sin function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cyanDiff.ad_overloads.cos">
+<span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_overloads.</span></span><span class="sig-name descname"><span class="pre">cos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_overloads.cos" title="Permalink to this definition"></a></dt>
+<dd><p>Math cosine function for defining functions for AD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>) – input to cos function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cyanDiff.ad_overloads.tan">
+<span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_overloads.</span></span><span class="sig-name descname"><span class="pre">tan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_overloads.tan" title="Permalink to this definition"></a></dt>
+<dd><p>Math tangent function for defining functions for AD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>) – input to tan function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cyanDiff.ad_overloads.exp">
+<span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_overloads.</span></span><span class="sig-name descname"><span class="pre">exp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_overloads.exp" title="Permalink to this definition"></a></dt>
+<dd><p>Math exponentiation function for defining functions for AD.</p>
+<p>Raise <span class="math notranslate nohighlight">\(e\)</span> to power of <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>) – input to exp function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="cyanDiff.ad_overloads.log">
+<span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_overloads.</span></span><span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_overloads.log" title="Permalink to this definition"></a></dt>
+<dd><p>Math natural logarithm function for defining functions for AD.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>object</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code>) – input to natural log function</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
-<div class="section" id="cyandiff-ad-types-module">
-<h2>cyanDiff.ad_types module<a class="headerlink" href="#cyandiff-ad-types-module" title="Permalink to this headline"></a></h2>
+<div class="section" id="module-cyanDiff.ad_types">
+<span id="cyandiff-ad-types-module"></span><h2>cyanDiff.ad_types module<a class="headerlink" href="#module-cyanDiff.ad_types" title="Permalink to this headline"></a></h2>
+<p>Class definitions for types used in Automatic Differentiation (AD).</p>
+<p>In this module two classes are implemented <a class="reference internal" href="#cyanDiff.ad_types.DualNumber" title="cyanDiff.ad_types.DualNumber"><code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code></a> and <a class="reference internal" href="#cyanDiff.ad_types.Function" title="cyanDiff.ad_types.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a>. The <a class="reference internal" href="#cyanDiff.ad_types.DualNumber" title="cyanDiff.ad_types.DualNumber"><code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code></a> 
+type represents dual numbers, which are a type of number with a real part and a dual part defined as a 
+coefficient multiplied by a number <span class="math notranslate nohighlight">\(\epsilon\)</span>. We have that <span class="math notranslate nohighlight">\(\epsilon^2=0\)</span>. See <a class="reference internal" href="#cyanDiff.ad_types.DualNumber" title="cyanDiff.ad_types.DualNumber"><code class="xref py py-class docutils literal notranslate"><span class="pre">DualNumber</span></code></a> 
+documentation for further explanation of how this is used in forward mode AD.</p>
+<p>The <a class="reference internal" href="#cyanDiff.ad_types.Function" title="cyanDiff.ad_types.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> class is used to build the complex functions which the user inputs for differentiation 
+out of basic operators and functions. Functions can be combined using binary operators, which allows the 
+user to define more complex functions with more parts. This class also implements the actual calculation of 
+the Jacobian using forward mode AD.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_types.</span></span><span class="sig-name descname"><span class="pre">DualNumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implements dual numbers for AD, and the basic operators associated.</p>
+<p>In the CyanDiff AD implementation, we use dual numbers to implement AD due to their convenient
+properties. In particular, we have that we can use the real part of the dual number to track the
+primal trace of the function, while the dual part tracks the tangent trace. In particular, we have
+the nice property that this is preserved across basic operations and function on dual numbers, making
+dual numbers particularly useful for forward mode AD. In this class, we implement dual numbers and
+their associated operators: addition, multiplication, subtraction, division, and exponentiation. We 
+also implement operations with int and float types so that operations between dual numbers and real 
+number types is also supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>real</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – the value of the real part of the dual number</p></li>
+<li><p><strong>dual</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>) – the coefficient of the dual part of the dual number, with default value 1.0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Example</dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">z1</span> <span class="o">=</span> <span class="n">DualNumber</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z2</span> <span class="o">=</span> <span class="n">DualNumber</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z3</span> <span class="o">=</span> <span class="n">z1</span> <span class="o">+</span> <span class="n">z2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">z4</span> <span class="o">=</span> <span class="n">z1</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z3</span><span class="o">.</span><span class="n">dual</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z4</span><span class="o">.</span><span class="n">real</span><span class="p">)</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">z4</span><span class="o">.</span><span class="n">dual</span><span class="p">)</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.valid_types">
+<span class="sig-name descname"><span class="pre">valid_types</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;)</span></em><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.valid_types" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">real</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dual</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Constructor method, defaults to dual part to be 1.0.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__add__" title="Permalink to this definition"></a></dt>
+<dd><p>Addition operator for two dual numbers.</p>
+<p>If second input is an ‘int’ or ‘float’, add the value to the real part of the dual number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__radd__">
+<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__radd__" title="Permalink to this definition"></a></dt>
+<dd><p>Reverse addition for dual numbers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__sub__">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__sub__" title="Permalink to this definition"></a></dt>
+<dd><p>Subtract second dual number from first</p>
+<p>If second input is an ‘int’ or ‘float’, subtract the value from the real part of the dual number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__rsub__">
+<span class="sig-name descname"><span class="pre">__rsub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__rsub__" title="Permalink to this definition"></a></dt>
+<dd><p>Reverse addition for dual numbers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__mul__" title="Permalink to this definition"></a></dt>
+<dd><p>Multiplication operator for two dual numbers.</p>
+<p>If the second input is an ‘int’ or ‘float’, multiply the value with the real and dual parts of the dual number.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__rmul__" title="Permalink to this definition"></a></dt>
+<dd><p>Reverse multiplication for dual numbers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__truediv__">
+<span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__truediv__" title="Permalink to this definition"></a></dt>
+<dd><p>Divide first dual number by second.</p>
+<p>If the second input is an ‘int’ or ‘float’, multiply the real and dual parts of the dual number by the value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__rtruediv__">
+<span class="sig-name descname"><span class="pre">__rtruediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__rtruediv__" title="Permalink to this definition"></a></dt>
+<dd><p>Reverse division for dual numbers.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__pow__">
+<span class="sig-name descname"><span class="pre">__pow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__pow__" title="Permalink to this definition"></a></dt>
+<dd><p>Raise first dual number to the power of the second</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__rpow__">
+<span class="sig-name descname"><span class="pre">__rpow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__rpow__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__neg__">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__neg__" title="Permalink to this definition"></a></dt>
+<dd><p>Negate a dual number</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.DualNumber.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cyanDiff.ad_types'</span></em><a class="headerlink" href="#cyanDiff.ad_types.DualNumber.__module__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_types.</span></span><span class="sig-name descname"><span class="pre">Function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evaluator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines function objects on which differentiation is performed.</p>
+<p>The user defines variables (see <code class="xref py py-class docutils literal notranslate"><span class="pre">make_vars()</span></code> documentation under the <code class="xref py py-class docutils literal notranslate"><span class="pre">ad_helpers</span></code> module), which 
+then can be combined into functions using math operations (basic operators defined in this class) and basic 
+functions that we define (please see <code class="xref py py-class docutils literal notranslate"><span class="pre">ad_overloads</span></code> module for more information regarding functions). The
+<a class="reference internal" href="#cyanDiff.ad_types.Function" title="cyanDiff.ad_types.Function"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function</span></code></a> objects that we define can then be differentiated using <a class="reference internal" href="#cyanDiff.ad_types.Function.diff_at" title="cyanDiff.ad_types.Function.diff_at"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function.diff_at()</span></code></a> and 
+:<a class="reference internal" href="#cyanDiff.ad_types.Function.jacobian_at" title="cyanDiff.ad_types.Function.jacobian_at"><code class="xref py py-class docutils literal notranslate"><span class="pre">Function.jacobian_at()</span></code></a> for single-variate and multi-variate functions respectively in order to obtain 
+the derivative at a particular point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>evaluator</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">function</span></code>) – underlying function that evaluates the object at a particular value.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.valid_types">
+<span class="sig-name descname"><span class="pre">valid_types</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'cyanDiff.ad_types.DualNumber'&gt;)</span></em><a class="headerlink" href="#cyanDiff.ad_types.Function.valid_types" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">evaluator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Constructor method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_assignment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__call__" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates the function at a given value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.diff_at">
+<span class="sig-name descname"><span class="pre">diff_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_assignment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.diff_at" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates the derivative of single-variate function at a point (scalar).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value_assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – dictionary mapping variables to values representing point of evaluation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.jacobian_at">
+<span class="sig-name descname"><span class="pre">jacobian_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_assignment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.jacobian_at" title="Permalink to this definition"></a></dt>
+<dd><p>Evaluates jacobian at a point (vector).</p>
+<p>If in <code class="xref py py-class docutils literal notranslate"><span class="pre">variable_order</span></code> the user specifies some but not all of the variables in the function,
+then the function returns an array with partials w.r.t. the specified variables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable_order</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code>) – list of variables in order to specify ordering of the jacobian’s columns</p></li>
+<li><p><strong>value_assignment</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – dictionary mapping variables to values representing point of evaluation</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__add__" title="Permalink to this definition"></a></dt>
+<dd><p>Combine two functions by addition operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__radd__">
+<span class="sig-name descname"><span class="pre">__radd__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__radd__" title="Permalink to this definition"></a></dt>
+<dd><p>Reversed addition of functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__sub__">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__sub__" title="Permalink to this definition"></a></dt>
+<dd><p>Combine two functions by subtraction operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__rsub__">
+<span class="sig-name descname"><span class="pre">__rsub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__rsub__" title="Permalink to this definition"></a></dt>
+<dd><p>Reversed subtraction of functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__mul__" title="Permalink to this definition"></a></dt>
+<dd><p>Combine two functions by multiplication operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__rmul__">
+<span class="sig-name descname"><span class="pre">__rmul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__rmul__" title="Permalink to this definition"></a></dt>
+<dd><p>Reversed multiplication of functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__truediv__">
+<span class="sig-name descname"><span class="pre">__truediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__truediv__" title="Permalink to this definition"></a></dt>
+<dd><p>Combine two functions by division operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__rtruediv__">
+<span class="sig-name descname"><span class="pre">__rtruediv__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__rtruediv__" title="Permalink to this definition"></a></dt>
+<dd><p>Reversed division of functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__pow__">
+<span class="sig-name descname"><span class="pre">__pow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__pow__" title="Permalink to this definition"></a></dt>
+<dd><p>Combine two functions by exponentiation operator.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__rpow__">
+<span class="sig-name descname"><span class="pre">__rpow__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__rpow__" title="Permalink to this definition"></a></dt>
+<dd><p>Reversed exponentiation of functions</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__neg__">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.Function.__neg__" title="Permalink to this definition"></a></dt>
+<dd><p>Negate a function.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.Function.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cyanDiff.ad_types'</span></em><a class="headerlink" href="#cyanDiff.ad_types.Function.__module__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.VectorFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cyanDiff.ad_types.</span></span><span class="sig-name descname"><span class="pre">VectorFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.VectorFunction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.VectorFunction.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">functions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.VectorFunction.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.VectorFunction.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value_assignment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.VectorFunction.__call__" title="Permalink to this definition"></a></dt>
+<dd><p>Call self as a function.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.VectorFunction.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'cyanDiff.ad_types'</span></em><a class="headerlink" href="#cyanDiff.ad_types.VectorFunction.__module__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cyanDiff.ad_types.VectorFunction.jacobian_at">
+<span class="sig-name descname"><span class="pre">jacobian_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_order</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_assignment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cyanDiff.ad_types.VectorFunction.jacobian_at" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-cyanDiff">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cyanDiff" title="Permalink to this headline"></a></h2>

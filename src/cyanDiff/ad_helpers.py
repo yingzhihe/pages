@@ -7,8 +7,7 @@ which can then be used for defining functions that can be used for AD. More func
 e.g. a function to perform Newton's algorithm using our AD calculator.
 """
 
-from .ad_types import Function, VectorFunction
-from .ad_overloads import sin, cos, tan, exp, log
+from .ad_types import DiffObject
 
 def make_vars(num_vars: int):
     """Provide a variables for user to define functions for AD.
@@ -20,8 +19,8 @@ def make_vars(num_vars: int):
     :rtype: :class:`list`, :class:`Function`
     """
     if num_vars == 1:
-        return Function()
+        return DiffObject()
     retval = []
     for _ in range(num_vars):
-        retval.append(Function())
+        retval.append(DiffObject())
     return retval

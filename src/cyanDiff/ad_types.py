@@ -14,6 +14,8 @@ the Jacobian using forward mode AD.
 """
 
 import numpy as np
+import copy
+from .reverse_mode import Node
 
 class DualNumber:
     """Implements dual numbers for AD, and the basic operators associated.
@@ -199,12 +201,11 @@ class Function:
 
     def diff_at(self, value_assignment):
         """Evaluates the derivative of single-variate function at a point (scalar).
-
         :param value_assignment: dictionary mapping variables to values representing point of evaluation
         :type value_assignment: :class:`dict`
         """
         if len(value_assignment) != 1:
-            raise TypeError("diff_at can only be used for single variable functions (R1 -> R1)")
+            raise TypeError("diff_at can only be used for functions of a single variable (R1 -> Rn)")
         direction = {}
         for k in value_assignment.keys():
             direction[k] = 1
@@ -236,6 +237,7 @@ class Function:
         :param value_assignment: dictionary mapping variables to values representing point of evaluation
         :type value_assignment: :class:`dict`
         """
+        
         # variable_order is a LIST of variables in order, to specify ordering of the jacobian's columns
         retval = np.zeros(len(variable_order))
         for idx, val in enumerate(variable_order):
@@ -364,12 +366,218 @@ class Function:
         evaluator = lambda value_assignment: -self(value_assignment)
         return Function(evaluator=evaluator)
 
+class DiffObject:
+    valid_types = (int, float, DualNumber)
+    # This class combines forward mode and reverse mode
+    def __init__(self, function=None, node=None):
+        self.function = Function() if function is None else function
+        self.node = Node() if node is None else node
+        self.var_order : list[DiffObject] = None
+
+    def set_var_order(self, *new_order):
+        for elt in new_order:
+            if not isinstance(elt, DiffObject):
+                raise TypeError("Invalid type")
+
+        self.var_order = new_order
+
+    def __call__(self, *value_list, reverse_mode=False):
+        var_values = variadic_helper(*value_list)
+
+        if self.var_order is None:
+            raise TypeError("No valid variable ordering has been specified yet")
+
+        value_assignment = {}
+        if len(var_values) != len(self.var_order):
+            raise TypeError("Incorrect number of variable values specified.")
+        
+        for var, val in zip(self.var_order, var_values):
+            this_var = var.node if reverse_mode else var.function
+            value_assignment[this_var] = val
+
+        if reverse_mode:
+            return self.node(value_assignment)
+        else:
+            return self.function(value_assignment)
+
+    def diff_at(self, var_value, reverse_mode=False):
+        if self.var_order is None:
+            raise TypeError("No valid variable ordering has been specified yet")
+
+        if len(self.var_order) != 1:
+            raise TypeError("diff_at can only be used for functions of a single variable(R1 -> Rn)")
+
+        value_assignment = {}
+        var = self.var_order[0]
+        
+        if reverse_mode:
+            value_assignment[var.node] = var_value
+            return self.node.diff_at(value_assignment)
+        else:
+            value_assignment[var.function] = var_value
+            return self.function.diff_at(value_assignment)
+
+    def jacobian_at(self, *value_list, reverse_mode=False):
+        var_values = variadic_helper(*value_list)
+
+        if self.var_order is None:
+            raise TypeError("No valid variable ordering has been specified yet")
+
+        value_assignment = {}
+        if len(var_values) != len(self.var_order):
+            raise TypeError("Mistmatching number of variable values specified")
+        
+        for var, val in zip(self.var_order, var_values):
+            this_var = var.node if reverse_mode else var.function
+            value_assignment[this_var] = val
+
+        this_var_order = list(map(lambda f : f.node if reverse_mode else f.function, self.var_order))
+
+        if reverse_mode:
+            return self.node.jacobian_at(this_var_order, value_assignment)
+        else:
+            return self.function.jacobian_at(this_var_order, value_assignment)
+
+    def __add__(self, other):
+        if isinstance(other, DiffObject):
+            f, n = self.function + other.function, self.node + other.node
+        elif isinstance(other, self.valid_types):
+            f, n = self.function + other, self.node + other
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __radd__(self, other):
+        if isinstance(other, self.valid_types):
+            f, n = other + self.function, other + self.node
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __sub__(self, other):
+        if isinstance(other, DiffObject):
+            f, n = self.function - other.function, self.node - other.node
+        elif isinstance(other, self.valid_types):
+            f, n = self.function - other, self.node - other
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __rsub__(self, other):
+        if isinstance(other, self.valid_types):
+            f, n = other - self.function, other - self.node
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __mul__(self, other):
+        if isinstance(other, DiffObject):
+            f, n = self.function * other.function, self.node * other.node
+        elif isinstance(other, self.valid_types):
+            f, n = self.function * other, self.node * other
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __rmul__(self, other):
+        if isinstance(other, self.valid_types):
+            f, n = other * self.function, other * self.node
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __truediv__(self, other):
+        if isinstance(other, DiffObject):
+            f, n = self.function / other.function, self.node / other.node
+        elif isinstance(other, self.valid_types):
+            f, n = self.function / other, self.node / other
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __rtruediv__(self, other):
+        if isinstance(other, self.valid_types):
+            f, n = other / self.function, other / self.node
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __pow__(self, other):
+        if isinstance(other, DiffObject):
+            f, n = self.function ** other.function, self.node ** other.node
+        elif isinstance(other, self.valid_types):
+            f, n = self.function ** other, self.node ** other
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __rpow__(self, other):
+        if isinstance(other, self.valid_types):
+            f, n = other ** self.function, other ** self.node
+        else:
+            raise TypeError(f"Invalid type: {type(other)}")
+
+        return DiffObject(function=f, node=n)
+
+    def __neg__(self):
+        f, n = -self.function, -self.node
+        return DiffObject(function=f, node=n)
+
+    def __str__(self):
+        return self.node.text_graph_viz()
+
+    def graph_image(self):
+        return self.node.graph_image()
+
 class VectorFunction:
-    def __init__(self, functions):
-        self.functions = functions
+    def __init__(self, *diff_objects):
+        self.diff_objects = diff_objects
 
-    def __call__(self, value_assignment):
-        return list(map(lambda f : f(value_assignment), self.functions))
+    def set_var_order(self, *new_order):
+        for obj in self.diff_objects:
+            obj.set_var_order(*new_order)
 
-    def jacobian_at(self, variable_order, value_assignment):
-        return np.stack(list(map(lambda f : f.jacobian_at(variable_order, value_assignment), self.functions)))
+    def __call__(self, *var_values, reverse_mode=False):
+        return np.array(list(map(lambda f : f(*var_values, reverse_mode=reverse_mode), self.diff_objects)))
+
+    def diff_at(self, var_value, reverse_mode=False):
+        return np.array(list(map(lambda f : f.diff_at(var_value, reverse_mode=reverse_mode), self.diff_objects)))
+
+    def jacobian_at(self, *var_values, reverse_mode=False):
+        return np.stack(list(map(lambda f : f.jacobian_at(*var_values, reverse_mode=reverse_mode), self.diff_objects)))
+
+def variadic_helper(*args):
+    output_list = []
+    for arg in args:
+        if isinstance(arg, list):
+            output_list.extend(arg)
+        elif isinstance(arg, np.ndarray):
+            if len(arg.shape) == 1:
+                lst = arg.tolist()
+            elif len(arg.shape) == 2:
+                if arg.shape[0] != 1 and arg.shape[1] != 1:
+                    raise TypeError(f"numpy ndarray input for function evaluation or derivative"
+                    + f" must either be row (n x 1) or column (1 x n) vectors {arg.shape}")
+                num_elts = arg.size
+                lst = arg.reshape(num_elts).tolist()
+            else:
+                raise TypeError("numpy ndarray input for function evaluation or derivative"
+                    + " must either be row (n x 1) or column (1 x n) vectors")
+            output_list.extend(lst)
+        elif isinstance(arg, (int, float)):
+            output_list.append(arg)
+        else:
+            raise TypeError("Inputs to function evaluation or derivative must be"
+                    + " of the following types: numeric (int/float), list of numerics,"
+                    + " numpy row (n x 1) or column (1 x n) vectors, i.e. ndarray type")
+
+    return output_list
